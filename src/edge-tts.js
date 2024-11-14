@@ -1,12 +1,11 @@
-import { buildWebSocketURL, splitTextByByteLength } from "./utils";
-import constants from "./constants";
+import { buildWebSocketURL, splitTextByByteLength } from "./utils.js";
+import constants from "./constants.js";
 import fs from "fs";
-import TTS from "./tts";
+import TTS from "./tts.js";
 
 export default class EdgeTTS {
   constructor(tts) {
     this.url = buildWebSocketURL();
-    this.socket = null;
     this.tts = new TTS(tts);
   }
 
@@ -22,9 +21,10 @@ export default class EdgeTTS {
       console.log(e);
       socket.close();
     });
+
     socket.addEventListener("close", ({ reason }) => {
       console.log("Connection closed:", reason);
-      fs.writeFile("output.mp3", this.tts.mp3, { encoding: "utf-8" }, (err) => {
+      fs.writeFile("output.mp3", this.tts.mp3, (err) => {
         if (err) {
           console.error("Error writing file:", err);
         } else {
@@ -32,6 +32,7 @@ export default class EdgeTTS {
         }
       });
     });
+
     socket.addEventListener("open", () => {
       socket.send(this.tts.generateCommand());
       // for (const segment of splitTextByByteLength(this.tts.text, 12)) {
@@ -41,6 +42,7 @@ export default class EdgeTTS {
       socket.send(this.tts.generateSSML(this.tts.segments[0]));
       // this.tts.segments.shift();
     });
+
     socket.addEventListener("message", (data) => {
       if (Buffer.isBuffer(data.data)) {
         // console.log("Received binary data");
@@ -67,17 +69,15 @@ export default class EdgeTTS {
       } else if (typeof data.data === "string") {
         const result = this.parseMessageText(data.data);
         if (result.Path === "turn.end") {
-          if (this.tts.segments.length > 0) {
-            socket.send(this.tts.generateSSML(this.tts.segments[0]));
-            this.tts.segments.shift();
-          } else {
-            socket.close();
-          }
+          // if (this.tts.segments.length > 0) {
+          // socket.send(this.tts.generateSSML(this.tts.segments[0]));
+          // this.tts.segments.shift();
+          // } else {
+          socket.close();
+          // }
         }
       }
     });
-
-    this.socket = socket;
   }
 
   /**

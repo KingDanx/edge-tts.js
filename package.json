@@ -11,5 +11,8 @@
     "start": "bun run src/main.js",
     "dev": "bun run src/main.js --watch"
   },
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "msedge-tts": "^1.3.4"
+  }
 }

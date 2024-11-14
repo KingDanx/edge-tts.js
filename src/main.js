@@ -1,4 +1,4 @@
-import EdgeSocket from "./edge-tts";
+import EdgeSocket from "./edge-tts.js";
 
 const socket = new EdgeSocket({
   voice: "en-US-GuyNeural",
@@ -7,3 +7,13 @@ const socket = new EdgeSocket({
 });
 
 socket.connect();
+
+// import { MsEdgeTTS, OUTPUT_FORMAT } from "msedge-tts";
+
+// const tts = new MsEdgeTTS();
+// await tts.setMetadata(
+//   "en-IE-ConnorNeural",
+//   OUTPUT_FORMAT.WEBM_24KHZ_16BIT_MONO_OPUS
+// );
+
+// tts.toFile("./example_audio.webm", "Hachi, how are you?");

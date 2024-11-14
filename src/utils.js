@@ -1,5 +1,5 @@
-import constants from "./constants";
-import { hash, randomUUID } from "crypto";
+import constants from "./constants.js";
+import { createHash, randomUUID } from "crypto";
 
 /**
  * @returns {string}
@@ -27,7 +27,7 @@ function generateSecMsGec() {
 
   const strToHash = `${Math.floor(ticks)}${constants.TRUSTED_CLIENT_TOKEN}`;
 
-  return hash("sha256", strToHash, "hex").toUpperCase();
+  return createHash("sha256", strToHash, "hex").toString().toUpperCase();
 }
 
 /**
