@@ -33,6 +33,6 @@ function generateSecMsGec() {
 /**
  * @returns @returns {string} - uuid is used in headers
  */
-function uuid() {
+export function uuid() {
   return randomUUID().replaceAll("-", "");
 }
