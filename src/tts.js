@@ -13,13 +13,14 @@ export default class TTS {
     this.rate = rate;
     this.volume = volume;
     this.text = text;
+    this.segments = [];
     this.mp3 = Buffer.alloc(0);
   }
 
   /**
    * @returns {string}
    */
-  generateSSML() {
+  generateSSML(text) {
     let ssml = "";
 
     ssml += "X-RequestId:";
@@ -35,7 +36,6 @@ export default class TTS {
     ssml += "\r\n\t\t</prosody>";
     ssml += "\r\n\t</voice>";
     ssml += "\r\n</speak>";
-
     return ssml;
   }
 

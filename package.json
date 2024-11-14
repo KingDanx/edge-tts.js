@@ -1,15 +1,15 @@
 {
   "name": "edge-tts.js",
   "module": "index.js",
-  "type": "module",
-  "scripts": {
-    "start": "bun run src/main.js",
-    "dev": "bun run src/main.js --watch"
-  },
   "devDependencies": {
     "@types/bun": "latest"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
-  }
+  },
+  "scripts": {
+    "start": "bun run src/main.js",
+    "dev": "bun run src/main.js --watch"
+  },
+  "type": "module"
 }
