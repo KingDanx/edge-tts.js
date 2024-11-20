@@ -1,7 +1,8 @@
 {
-  "name": "edge-tts.js",
-  "module": "edge-tts.js",
-  "version": "1.0.0",
+  "name": "@kingdanx/edge-tts-js",
+  "main": "dist/edge-tts.min.js",
+  "module": "dist/edge-tts.min.js",
+  "version": "1.0.2",
   "devDependencies": {
     "@types/bun": "latest"
   },
@@ -17,5 +18,8 @@
   "files": [
     "dist/",
     "src/"
-  ]
+  ],
+  "dependencies": {
+    "ws": "^8.18.0"
+  }
 }

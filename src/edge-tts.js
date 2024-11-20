@@ -3,6 +3,7 @@ import fs from "fs";
 import TTS from "./tts.js";
 import constants from "./constants.js";
 import path from "path";
+import WebSocket from "ws";
 
 export default class EdgeTTS {
   static fileTypes = constants.OUTPUT_FORMATS;
@@ -84,9 +85,11 @@ export default class EdgeTTS {
         }
       } else if (typeof data.data === "string") {
         const result = this.parseMessageText(data.data);
+        console.log(result);
         if (result.Path === "turn.end") {
-          socket.close();
+          socket.close(0);
         }
+      } else {
       }
     });
   }
