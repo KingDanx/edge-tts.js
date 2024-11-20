@@ -21,7 +21,7 @@ export default class TTS {
   /**
    * @returns {string}
    */
-  generateSSML(text) {
+  generateSSML() {
     let ssml = "";
 
     ssml += "X-RequestId:";
