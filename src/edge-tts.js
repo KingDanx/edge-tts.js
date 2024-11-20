@@ -56,6 +56,7 @@ export default class EdgeTTS {
         fs.writeFile(filePath, this.file, (err) => {
           if (err) {
             console.error("Error writing file:", err);
+            reject(err);
           }
           resolve(filePath);
         });
