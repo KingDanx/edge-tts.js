@@ -1,83 +1,76 @@
-import { buildWebSocketURL, splitTextByByteLength } from "./utils.js";
-import constants from "./constants.js";
+import { buildWebSocketURL, uuid } from "./utils.js";
 import fs from "fs";
 import TTS from "./tts.js";
+import constants from "./constants.js";
 
 export default class EdgeTTS {
   constructor(tts) {
     this.url = buildWebSocketURL();
     this.tts = new TTS(tts);
+    this.file = Buffer.alloc(0);
   }
 
   /**
    * @returns {void}
    */
   connect() {
-    const socket = new WebSocket(this.url, {
-      headers: constants.WSS_HEADERS,
-    });
+    try {
+      const socket = new WebSocket(this.url, {
+        headers: constants.WSS_HEADERS,
+      });
 
-    socket.addEventListener("error", (e) => {
-      console.log(e);
-      socket.close();
-    });
+      socket.binaryType = "arraybuffer";
 
-    socket.addEventListener("close", ({ reason }) => {
-      console.log("Connection closed:", reason);
-      fs.writeFile("output.mp3", this.tts.mp3, (err) => {
-        if (err) {
-          console.error("Error writing file:", err);
-        } else {
-          console.log("File has been written successfully.");
+      socket.addEventListener("error", (e) => {
+        socket.close();
+      });
+
+      socket.addEventListener("close", (e) => {
+        const fileName = uuid() + this.tts.fileType.ext;
+        fs.writeFile(fileName, this.file, (err) => {
+          if (err) {
+            console.error("Error writing file:", err);
+          } else {
+            console.log("write complete");
+          }
+        });
+      });
+
+      socket.addEventListener("open", () => {
+        socket.send(this.tts.generateCommand());
+        socket.send(this.tts.generateSSML());
+      });
+
+      socket.addEventListener("message", (data) => {
+        if (data.data instanceof ArrayBuffer) {
+          const buffer = Buffer.from(data.data);
+          if (buffer.length >= 2) {
+            const headerLength = buffer.readUInt16BE(0) + "\r\n".length;
+            const header = buffer.subarray(0, headerLength);
+            const result = this.parseMessageText(header.toString());
+
+            if (result.Path !== "audio") {
+              return;
+            }
+
+            const payload = buffer.subarray(headerLength);
+            const totalLength = this.file.length + payload.length;
+            this.file = Buffer.concat([this.file, payload], totalLength);
+          } else {
+            console.error(
+              "Received data is too short to contain a valid header."
+            );
+          }
+        } else if (typeof data.data === "string") {
+          const result = this.parseMessageText(data.data);
+          if (result.Path === "turn.end") {
+            socket.close();
+          }
         }
       });
-    });
-
-    socket.addEventListener("open", () => {
-      socket.send(this.tts.generateCommand());
-      // for (const segment of splitTextByByteLength(this.tts.text, 12)) {
-      //   this.tts.segments.push(segment);
-      // }
-      // console.log(this.tts.segments);
-      socket.send(this.tts.generateSSML(this.tts.segments[0]));
-      // this.tts.segments.shift();
-    });
-
-    socket.addEventListener("message", (data) => {
-      if (Buffer.isBuffer(data.data)) {
-        // console.log("Received binary data");
-        if (data.data.length >= 2) {
-          const headerLength = data.data.readUInt16BE(0);
-          const header = data.data.subarray(0, headerLength);
-          const result = this.parseMessageText(header.toString());
-
-          console.log(result);
-          // console.log(result.Path);
-          if (result.Path !== "audio") {
-            return;
-          }
-
-          const payload = data.data.subarray(headerLength);
-          const totalLength = this.tts.mp3.length + payload.length;
-          this.tts.mp3 = Buffer.concat([this.tts.mp3, payload], totalLength);
-        } else {
-          console.error(
-            "Received data is too short to contain a valid header."
-          );
-        }
-        // Process or store the data
-      } else if (typeof data.data === "string") {
-        const result = this.parseMessageText(data.data);
-        if (result.Path === "turn.end") {
-          // if (this.tts.segments.length > 0) {
-          // socket.send(this.tts.generateSSML(this.tts.segments[0]));
-          // this.tts.segments.shift();
-          // } else {
-          socket.close();
-          // }
-        }
-      }
-    });
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   /**

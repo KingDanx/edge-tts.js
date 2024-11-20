@@ -1,4 +1,5 @@
 import { uuid } from "./utils.js";
+import constants from "./constants.js";
 
 export default class TTS {
   constructor({
@@ -7,14 +8,14 @@ export default class TTS {
     rate = "+0%",
     volume = "+0%",
     text = "",
+    fileType = constants.OUTPUT_FORMATS.AUDIO_24KHZ_48KBITRATE_MONO_MP3,
   }) {
     this.voice = voice;
     this.pitch = pitch;
     this.rate = rate;
     this.volume = volume;
     this.text = text;
-    this.segments = [];
-    this.mp3 = Buffer.alloc(0);
+    this.fileType = fileType;
   }
 
   /**
@@ -47,7 +48,7 @@ export default class TTS {
     command += `X-Timestamp:${new Date()}`;
     command += "\r\nContent-Type:application/json; charset=utf-8";
     command += "\r\nPath:speech.config";
-    command += `\r\n\r\n{"context":{"synthesis":{"audio":{"metadataoptions":{"sentenceBoundaryEnabled":false,"wordBoundaryEnabled":true},"outputFormat":"audio-24khz-48kbitrate-mono-mp3"}}}}\r\n`;
+    command += `\r\n\r\n{"context":{"synthesis":{"audio":{"metadataoptions":{"sentenceBoundaryEnabled":false,"wordBoundaryEnabled":true},"outputFormat":"${this.fileType.tag}"}}}}\r\n`;
 
     return command;
   }

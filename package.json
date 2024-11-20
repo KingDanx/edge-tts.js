@@ -9,10 +9,8 @@
   },
   "scripts": {
     "start": "bun run src/main.js",
-    "dev": "bun run src/main.js --watch"
+    "dev": "bun run src/main.js --watch",
+    "node": "node src/main.js"
   },
-  "type": "module",
-  "dependencies": {
-    "msedge-tts": "^1.3.4"
-  }
+  "type": "module"
 }
