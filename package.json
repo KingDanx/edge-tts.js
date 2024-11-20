@@ -1,6 +1,7 @@
 {
   "name": "edge-tts.js",
-  "module": "test.js",
+  "module": "edge-tts.js",
+  "version": "1.0.0",
   "devDependencies": {
     "@types/bun": "latest"
   },
@@ -9,8 +10,12 @@
   },
   "scripts": {
     "start": "bun run src/test.js",
-    "dev": "bun run src/test.js --watch",
+    "dev": "bun --watch run src/test.js",
     "node": "node src/test.js"
   },
-  "type": "module"
+  "type": "module",
+  "files": [
+    "dist/",
+    "src/"
+  ]
 }
