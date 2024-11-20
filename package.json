@@ -2,7 +2,7 @@
   "name": "@kingdanx/edge-tts-js",
   "main": "dist/edge-tts.min.js",
   "module": "dist/edge-tts.min.js",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "devDependencies": {
     "@types/bun": "latest"
   },

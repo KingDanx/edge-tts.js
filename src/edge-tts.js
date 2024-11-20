@@ -2,7 +2,7 @@ import { buildWebSocketURL } from "./utils.js";
 import fs from "fs";
 import TTS from "./tts.js";
 import constants from "./constants.js";
-import path, { resolve } from "path";
+import path from "path";
 import WebSocket from "ws";
 
 export default class EdgeTTS {
@@ -89,30 +89,11 @@ export default class EdgeTTS {
         } else if (typeof data.data === "string") {
           const result = this.parseMessageText(data.data);
           if (result.Path === "turn.end") {
-            socket.close(0);
+            socket.close();
           }
         }
       });
     });
-  }
-
-  /**
-   * @returns {void}
-   */
-  disconnect() {
-    if (this.socket !== null) {
-      this.socket.close();
-    }
-  }
-
-  /**
-   * @param {string} data
-   * @returns {void}
-   */
-  send(data) {
-    if (this.socket !== null) {
-      this.socket.send(data);
-    }
   }
 
   /**
