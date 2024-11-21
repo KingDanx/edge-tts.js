@@ -2,7 +2,7 @@
   "name": "@kingdanx/edge-tts-js",
   "main": "dist/edge-tts.min.js",
   "module": "dist/edge-tts.min.js",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "devDependencies": {
     "@types/bun": "latest"
   },
@@ -10,9 +10,9 @@
     "typescript": "^5.0.0"
   },
   "scripts": {
-    "start": "bun run src/test.js",
-    "dev": "bun --watch run src/test.js",
-    "node": "node src/test.js"
+    "start": "bun run src/example.js",
+    "dev": "bun --watch run src/example.js",
+    "node": "node src/example.js"
   },
   "type": "module",
   "files": [

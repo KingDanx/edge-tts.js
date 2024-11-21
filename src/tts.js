@@ -3,7 +3,7 @@ import constants from "./constants.js";
 
 export default class TTS {
   constructor({
-    voice = "",
+    voice = "en-US-GuyNeural",
     pitch = "+0Hz",
     rate = "+0%",
     volume = "+0%",
@@ -21,7 +21,7 @@ export default class TTS {
   /**
    * @returns {string}
    */
-  generateSSML(text) {
+  generateSSML() {
     let ssml = "";
 
     ssml += "X-RequestId:";
@@ -51,5 +51,34 @@ export default class TTS {
     command += `\r\n\r\n{"context":{"synthesis":{"audio":{"metadataoptions":{"sentenceBoundaryEnabled":false,"wordBoundaryEnabled":true},"outputFormat":"${this.fileType.tag}"}}}}\r\n`;
 
     return command;
+  }
+
+  /**
+   *
+   * @param {Object} voiceParams
+   * @param {string} [voiceParams.voice] - EdgeTTS.getVoices() -> voice.ShortName
+   * @param {string} [voiceParams.pitch] - +0Hz, -10Hz, +50Hz
+   * @param {string} [voiceParams.rate] - +0%, -10%, +50%
+   * @param {string} [voiceParams.volume] - +0%, -10%, +50%
+   * @param {string} [voiceParams.text] - This will be the audio output
+   * @param {Object} [voiceParams.fileType] - EdgeTTS.fileTypes
+   * @param {string} voiceParams.fileType.tag
+   * @param {string} voiceParams.fileType.ext
+   * @returns {void}
+   */
+  setVoiceParams({
+    voice = this.voice,
+    pitch = this.pitch,
+    rate = this.rate,
+    volume = this.volume,
+    text = this.text,
+    fileType = this.fileType,
+  }) {
+    this.voice = voice;
+    this.pitch = pitch;
+    this.rate = rate;
+    this.volume = volume;
+    this.text = text;
+    this.fileType = fileType;
   }
 }

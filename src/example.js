@@ -1,8 +1,3 @@
-# edge-tts.js
-
-## example.js
-
-```js
 import EdgeTTS from "./edge-tts.js";
 
 const __dirname = import.meta.dirname;
@@ -46,4 +41,3 @@ edgeTTS.tts.setVoiceParams({
 
 //? Print out error
 await edgeTTS.ttsToFile().catch((e) => console.error(e));
-```

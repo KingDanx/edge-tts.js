@@ -31,10 +31,13 @@ export default class EdgeTTS {
 
   /**
    * @param {string} directory
-   * @returns {Promise}
+   * @returns {Promise<string>} - file path to the output file or an error string
    */
   ttsToFile(directory = "") {
     return new Promise((resolve, reject) => {
+      if (!this.tts.text) {
+        return reject("there is no text input");
+      }
       const socket = new WebSocket(this.url, {
         headers: constants.WSS_HEADERS,
       });
@@ -43,7 +46,7 @@ export default class EdgeTTS {
 
       socket.addEventListener("error", (e) => {
         socket.close();
-        reject(e);
+        reject(e.toString());
       });
 
       socket.addEventListener("close", (e) => {
@@ -56,8 +59,9 @@ export default class EdgeTTS {
         fs.writeFile(filePath, this.file, (err) => {
           if (err) {
             console.error("Error writing file:", err);
-            reject(err);
+            reject(err.toString());
           }
+          this.file = Buffer.alloc(0);
           resolve(filePath);
         });
       });
@@ -73,7 +77,7 @@ export default class EdgeTTS {
           if (buffer.length >= 2) {
             const headerLength = buffer.readUInt16BE(0) + "\r\n".length;
             const header = buffer.subarray(0, headerLength);
-            const result = this.parseMessageText(header.toString());
+            const result = this.#parseMessageText(header.toString());
 
             if (result.Path !== "audio") {
               return;
@@ -88,7 +92,7 @@ export default class EdgeTTS {
             );
           }
         } else if (typeof data.data === "string") {
-          const result = this.parseMessageText(data.data);
+          const result = this.#parseMessageText(data.data);
           if (result.Path === "turn.end") {
             socket.close();
           }
@@ -101,7 +105,7 @@ export default class EdgeTTS {
    * @param {string} text
    * @returns {object}
    */
-  parseMessageText(text) {
+  #parseMessageText(text) {
     const obj = {};
     const split = text.split("\r\n");
 
