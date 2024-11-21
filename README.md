@@ -39,7 +39,7 @@ edgeTTS.tts.setVoiceParams({
 //? Generate a new file with the new parameters in a passed directory
 await edgeTTS.ttsToFile(__dirname);
 
-//? Update parameters to throw and error
+//? Update parameters to throw an error
 edgeTTS.tts.setVoiceParams({
   text: null,
 });
