@@ -9,7 +9,7 @@ export default class TTS {
     volume = "+0%",
     text = "",
     fileType = constants.OUTPUT_FORMATS.AUDIO_24KHZ_48KBITRATE_MONO_MP3,
-  }) {
+  } = {}) {
     this.voice = voice;
     this.pitch = pitch;
     this.rate = rate;
