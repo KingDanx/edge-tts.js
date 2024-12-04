@@ -2,14 +2,16 @@ import { uuid } from "./utils.js";
 import constants from "./constants.js";
 
 export default class TTS {
-  constructor({
-    voice = "en-US-GuyNeural",
-    pitch = "+0Hz",
-    rate = "+0%",
-    volume = "+0%",
-    text = "",
-    fileType = constants.OUTPUT_FORMATS.AUDIO_24KHZ_48KBITRATE_MONO_MP3,
-  } = {}) {
+  static defaults = {
+    voice: "en-US-GuyNeural",
+    pitch: "+0Hz",
+    rate: "+0%",
+    volume: "+0%",
+    text: null,
+    fileType: constants.OUTPUT_FORMATS.AUDIO_24KHZ_48KBITRATE_MONO_MP3,
+  };
+
+  constructor({ voice, pitch, rate, volume, text, fileType } = TTS.defaults) {
     this.voice = voice;
     this.pitch = pitch;
     this.rate = rate;
