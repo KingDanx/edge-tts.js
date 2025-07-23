@@ -1,8 +1,8 @@
 {
   "name": "@kingdanx/edge-tts-js",
-  "main": "edge-tts.js",
-  "module": "edge-tts.js",
-  "version": "1.0.9",
+  "main": "src/edge-tts.js",
+  "module": "src/edge-tts.js",
+  "version": "1.0.10",
   "devDependencies": {
     "@types/bun": "latest"
   },
