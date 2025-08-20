@@ -55,7 +55,9 @@ export default class EdgeTTS {
           .slice(0, endIndex)
           .trim()}${this.tts.fileType.ext}`;
         const filePath = path.join(directory, fileName);
-
+        if (this.file.length === 0) {
+          return reject(new Error("the file buffer is empty"));
+        }
         fs.writeFile(filePath, this.file, (err) => {
           if (err) {
             console.error("Error writing file:", err);

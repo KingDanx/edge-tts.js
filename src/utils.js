@@ -6,8 +6,10 @@ import { createHash, randomUUID } from "crypto";
  */
 export function buildWebSocketURL() {
   let url = constants.WSS_URL;
-  url += "&Sec-MS-GEC-Version=";
+  url += "&Sec-MS-GEC=";
   url += generateSecMsGec();
+  url += "&Sec-MS-GEC-Version=";
+  url += constants.SEC_MS_GEC_VERSION;
   url += "&ConnectionId=";
   url += uuid();
   return url;
@@ -27,7 +29,7 @@ function generateSecMsGec() {
 
   const strToHash = `${Math.floor(ticks)}${constants.TRUSTED_CLIENT_TOKEN}`;
 
-  return createHash("sha256", strToHash, "hex").toString().toUpperCase();
+  return createHash("sha256").update(strToHash).digest("hex").toUpperCase();
 }
 
 /**
