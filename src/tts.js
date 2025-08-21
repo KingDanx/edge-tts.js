@@ -34,9 +34,7 @@ export default class TTS {
     ssml +=
       "\r\n\r\n<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='en-US'>";
     ssml += `\r\n\t<voice name='${this.voice}'>`;
-    ssml += `\r\n\t\t<prosody pitch='${this.pitch}' rate='${
-      this.rate || "0Hz"
-    }' volume='${this.volume || "100%"}'>`;
+    ssml += `\r\n\t\t<prosody pitch='${this.pitch}' rate='${this.rate}' volume='${this.volume}'>`;
     ssml += `\r\n\t\t\t${this.text}`;
     ssml += "\r\n\t\t</prosody>";
     ssml += "\r\n\t</voice>";
